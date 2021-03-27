@@ -1,0 +1,6 @@
+{
+    "editor.formatOnSave": true,
+    "editor.codeLens": false,
+    "editor.fontFamily": "'Fira Code'",
+    "editor.fontLigatures": true,
+}

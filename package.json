@@ -1,0 +1,16 @@
+{
+  "name": "multicast-elm",
+  "version": "1.0.0",
+  "description": "Multicast Causal Ordering simulation and visualization. Using vector clocks to maintain the order of causally related messages in a distributed system.",
+  "main": "dist/index.js",
+  "dependencies": {
+    "elm": "^0.19.1-5",
+    "elm-format": "^0.8.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
