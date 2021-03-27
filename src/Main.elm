@@ -1,7 +1,7 @@
 module Main exposing (Model(..), Msg(..), ViewModel, main, modelToViewModel, processDiagramListView, stringListItemView, update, view)
 
 import Browser
-import Html exposing (Html, button, div, li, nav, text, textarea, ul)
+import Html exposing (Html, div, li, nav, text, textarea, ul)
 import Html.Attributes exposing (id, style, target, value)
 import Html.Events exposing (onClick, onInput)
 import MessageId
