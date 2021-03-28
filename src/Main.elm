@@ -10,6 +10,7 @@ import MulticastCommunicationParser
 import MulticastDiagram
 import MulticastDiagramSimulation
 import ProcessNumber
+import SentMessage exposing (SentMessage)
 import Svg
 import Svg.Attributes exposing (cx, cy, d, height, markerEnd, markerHeight, markerStart, markerWidth, orient, r, refX, refY, stroke, strokeWidth, width, x, x1, x2, y, y1, y2)
 import TimeStep
@@ -141,8 +142,15 @@ svgText ( xPos, yPos ) { fillColor, decoration } text =
 processDiagramView : Int -> MulticastDiagram.ProcessDiagram -> List (Html Msg)
 processDiagramView maxOperations { processNumber, operations, undeliveredMessages } =
     let
+        messageIdString { messageId } =
+            MessageId.value messageId
+
         messageStrings =
-            List.map (\{ messageId } -> MessageId.value messageId) >> String.join " | "
+            List.map messageIdString >> String.join " | "
+
+        messagesTooltip : List SentMessage -> String
+        messagesTooltip =
+            List.map SentMessage.show >> String.join "\n"
 
         ( xPos, _ ) =
             operationCenter processNumber 0
@@ -192,7 +200,7 @@ processDiagramView maxOperations { processNumber, operations, undeliveredMessage
                             , sentY |> String.fromInt |> y1
                             , markerX |> String.fromInt |> x2
                             , markerY |> String.fromInt |> y2
-                            , strokeWidth "1.5"
+                            , strokeWidth "1.2"
                             , stroke
                                 (if isOddProcess then
                                     "#ff0"
@@ -206,11 +214,30 @@ processDiagramView maxOperations { processNumber, operations, undeliveredMessage
                             []
                         , case messagesDelivered of
                             [] ->
-                                Svg.text_ [] []
+                                Svg.g []
+                                    [ Svg.title
+                                        []
+                                        [ [ [ "Received by but NOT delivered to P#", ProcessNumber.label processNumber ] |> String.concat
+                                          , messagesDelivered |> messagesTooltip
+                                          ]
+                                            |> String.join "\n"
+                                            |> Svg.text
+                                        ]
+                                    , svgText ( markerX + 5, markerY + 8 ) { fillColor = "#ccc", decoration = "underline" } "Received"
+                                    , receivedMessage |> messageIdString |> svgText ( markerX + 5, markerY + 24 ) { fillColor = "#ccc", decoration = "none" }
+                                    ]
 
                             _ ->
                                 Svg.g []
-                                    [ svgText ( markerX + 5, markerY + 8 ) { fillColor = "#4f4", decoration = "underline" } "Delivered:"
+                                    [ Svg.title
+                                        []
+                                        [ [ [ "Delivered to P#", ProcessNumber.label processNumber ] |> String.concat
+                                          , messagesDelivered |> messagesTooltip
+                                          ]
+                                            |> String.join "\n"
+                                            |> Svg.text
+                                        ]
+                                    , svgText ( markerX + 5, markerY + 8 ) { fillColor = "#4f4", decoration = "underline" } "Delivered"
                                     , messagesDelivered |> messageStrings |> svgText ( markerX + 5, markerY + 24 ) { fillColor = "#4f4", decoration = "none" }
                                     ]
                         ]
@@ -293,6 +320,7 @@ specificationView specification =
             , exampleLink "Causal" "b:one r:two_after_one\nr:one b:two_after_one\nr:two_after_one r:one\n"
             , exampleLink "Another Causal" "b:a b:b r:c_after_a b:d\nr:b r:a b:c_after_a r:d\nr:d r:c_after_a r:b r:a\n"
             , exampleLink "Concurrent" "b:a b:b r:c r:d\nb:c b:d r:a r:b\nr:d r:c r:b r:a\n"
+            , exampleLink "Good Mix" "b:1a r:2a b:1b r:2b\nb:2a r:1a b:2b r:1b\nr:2b r:2a r:1b r:1a\n"
             ]
         , div
             [ style "display" "flex", style "margin-bottom" "8px" ]

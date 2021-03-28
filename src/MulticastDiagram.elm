@@ -1,18 +1,9 @@
-module MulticastDiagram exposing (ProcessDiagram, ProcessOperation(..), ReceiptInformation, SentMessage, deliverMessage, deliverMessages)
+module MulticastDiagram exposing (ProcessDiagram, ProcessOperation(..), ReceiptInformation, deliverMessage, deliverMessages)
 
 import Array exposing (Array(..))
-import MessageId exposing (MessageId)
 import ProcessNumber exposing (ProcessNumber)
-import TimeStep
+import SentMessage exposing (SentMessage)
 import VectorTime exposing (VectorTime)
-
-
-type alias SentMessage =
-    { messageId : MessageId
-    , vectorTime : VectorTime.VectorTime
-    , sentByProcess : ProcessNumber
-    , sentAtTime : TimeStep.TimeStep
-    }
 
 
 type alias ReceiptInformation =

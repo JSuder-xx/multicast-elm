@@ -3,8 +3,9 @@ module MulticastDiagramSimulation exposing (interprocessCommunicationToDiagram)
 import Dict exposing (Dict(..))
 import MessageId
 import MulticastCommunication
-import MulticastDiagram exposing (ProcessDiagram, ProcessOperation(..), SentMessage, deliverMessage, deliverMessages)
+import MulticastDiagram exposing (ProcessDiagram, ProcessOperation(..), deliverMessage, deliverMessages)
 import ProcessNumber exposing (ProcessNumber)
+import SentMessage exposing (SentMessage)
 import TimeStep
 import VectorTime exposing (VectorTime)
 
